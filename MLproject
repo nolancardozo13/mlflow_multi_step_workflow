@@ -1,0 +1,30 @@
+name: blindness_detection
+
+conda_env: conda.yaml
+
+entry_points:
+  download_and_extract:
+    parameters: 
+      kaggle_url: {type: str, default: "kaggle competitions download -c aptos2019-blindness-detection"}
+      folder_name: {type: str, default: "dataset"}
+    command: "python download_and_extract.py --kaggle_url {kaggle_url} --folder_name {folder_name}"
+
+  split_data:
+    parameters:
+      data_path: {type: str, default: "dataset"}
+    command: "python split_data.py --data_path {data_path}"
+
+  train:
+    parameters:
+      num_classes: {type: int, default: 5}
+      batch_size: {type: int, default: 16}
+      epochs: {type: int , default: 10}
+      lr: {type: float, default: 0.000001}
+      weight_decay: {type: float, default: 0.01}
+      pre_trained: {type: bool, default: True}
+      data_path: {type: str, default: "dataset"}
+      model_path: {type:str, default: "model/model"}
+    command: "python train.py --num_classes {num_classes} --batch_size {batch_size} --epochs {epochs} --lr {lr} --weight_decay {weight_decay} --pre_trained {pre_trained} --data_path {data_path} --model_path  {model_path}"
+
+  main:
+    command: "python main.py"
